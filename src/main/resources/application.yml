@@ -42,9 +42,9 @@ spring:
     #security:        # Security Configuration (if using OAuth2/JWT)
     #basic:
     # enabled: true
-  user:
-    name: murat # login username
-    password: oneamz
+ # user:
+  #  name: murat # login username
+   # password: oneamz
       # oauth2:
       # resourceserver:
       #  jwt:
@@ -52,10 +52,6 @@ spring:
   cloud:
     config:
       enabled: false
-    discovery:
-      client:
-        serviceUrl:
-          defaultZone: ${eureka_url:http://murat:oneamz@localhost:${server.port}/eureka/}
   springdoc:
     api-docs:
       path: /v3/api-docs

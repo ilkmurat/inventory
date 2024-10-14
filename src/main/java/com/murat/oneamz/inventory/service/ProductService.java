@@ -47,13 +47,14 @@ public class ProductService {
         return product;
     }
 
-    public List<ProductDTO> getAllProducts() {
+     public List<ProductDTO> getAllProducts() {
         return productRepository.findAll()
                 .stream()
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
     }
 
+    //@CircuitBreaker(name = "productService", fallbackMethod = "fallbackMethod")
     public ProductDTO getProductById(Long id) {
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new ItemNotFoundException(id));
@@ -94,5 +95,15 @@ public class ProductService {
         if (product.getPrice() < 0) {
             throw new BadRequestException("Price cannot be negative.");
         }
+    }
+
+    public Product fallbackMethod(Long id, Throwable t) {
+        Product fallbackProduct = new Product();
+        fallbackProduct.setName("Fallback Product");
+        fallbackProduct.setDescription("Description unavailable");
+        fallbackProduct.setQuantity(0);
+        fallbackProduct.setPrice(0.0);
+        fallbackProduct.setCategory(new Category());
+        return fallbackProduct;
     }
 }
