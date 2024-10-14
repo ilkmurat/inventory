@@ -1,0 +1,69 @@
+server:
+  port: 9191
+    #servlet:
+  # context-path: "/${spring.application.api-version}"
+
+eureka:
+  client:
+    fetchRegistry: false
+    registerWithEureka: false
+    serviceUrl:
+      defaultZone: ${eureka_url:http://murat:oneamz@localhost:${server.port}/eureka/}
+  instance:
+    hostname: localhost
+    prefer-ip-address: true
+
+spring:
+  application:
+    api-version: "v1"
+    name: inventory-service # Name of the service
+  datasource:
+    url: jdbc:postgresql://localhost:5432/inventory # Update with your PostgreSQL database URL
+    username: postgres # Update with your PostgreSQL username
+    password: postgres # Update with your PostgreSQL password
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update # Automatically updates the schema; change to validate for production
+    show-sql: true # Enables SQL logging
+  kafka:
+    bootstrap-servers: localhost:9092 # Kafka broker address
+    consumer:
+      group-id: inventory-group # Consumer group ID
+      auto-offset-reset: earliest # How to handle offsets for new consumers
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer # Value deserializer for consumer
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer # Key deserializer for consumer
+    producer:
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer # Value serializer for producer
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer # Key serializer for producer
+    loadbalancer:
+      retry:
+        enabled: true # Enable load balancing retries
+    #security:        # Security Configuration (if using OAuth2/JWT)
+    #basic:
+    # enabled: true
+  user:
+    name: murat # login username
+    password: oneamz
+      # oauth2:
+      # resourceserver:
+      #  jwt:
+    #  issuer-uri: https://your-issuer-uri # Replace with your JWT issuer URI
+  cloud:
+    config:
+      enabled: false
+    discovery:
+      client:
+        serviceUrl:
+          defaultZone: ${eureka_url:http://murat:oneamz@localhost:${server.port}/eureka/}
+  springdoc:
+    api-docs:
+      path: /v3/api-docs
+    swagger-ui:
+      path: /swagger-ui.html
+
+# Logging Configuration
+logging:
+  level:
+    org.springframework: INFO # Log level for Spring Framework
+    com.murat.oneamz.inventory: DEBUG # Log level for your application package; replace 'com.yourpackage' with your actual package name
